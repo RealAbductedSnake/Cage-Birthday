@@ -11,6 +11,13 @@ body{
     margin-right: 80px;
 }
 
-div{
+.message{
     font-family: 'Style Script';
+    font-size: 25px;
+
+}
+
+.image {
+    width: 500px;
+    height: 500px;
 }
