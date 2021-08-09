@@ -3,6 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script>
+        WebFont.load({
+            google: {
+                families: ['Style Script']
+            }
+        });
+    </script>
 </head>
 <body>
 
@@ -10,7 +19,7 @@
 
 <img src="images/img1.jpg" alt="Missing image">
 
-<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
+<p id="text1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
     molestiae quas vel sint commodi repudiandae consequuntur voluptatum laborum
     numquam blanditiis harum quisquam eius sed odit fugiat iusto fuga praesentium
     optio, eaque rerum! Provident similique accusantium nemo autem. Veritatis
@@ -32,7 +41,9 @@
     totam ratione voluptas quod exercitationem fuga. Possimus quis earum veniam
     quasi aliquam eligendi, placeat qui corporis!</p>
 
-
+<script>
+    document.getElementById("text1").style.fontFamily = "Style Script"
+</script>
 
 </body>
 </html>
