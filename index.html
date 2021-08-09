@@ -9,7 +9,7 @@
     <script>
         WebFont.load({
             google: {
-                families: ['Kaushan Script']
+                families: ['Kaushan Script','Chicle']
             }
         });
     </script>
@@ -17,15 +17,21 @@
     <link rel="stylesheet" type="text/css" href="style.css">
 <!--    <script src="script.js"></script>-->
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
-    <script src="CircleType-master/CircleType-master/dist/circletype.min.js"></script>
+    <script src="https://circletype.labwire.ca/dist/circletype.min.js"></script>
+<!--    <script src="https://github.com/davatron5000/FitText.js/blob/master/jquery.fittext.js"></script>-->
+
 </head>
 <body>
 
-<h1 id="header">Happy birthday, Cage!</h1>
+<h1 id="header" style="size: 40px; font-family: 'Chicle'">Happy birthday, Cage!</h1>
 
 
 <script>
-    new CircleType(document.getElementById("header")).dir(-1).radius(384);
+    let demo4 = new CircleType(document.getElementById("header")).dir(-1).radius(384);
+
+    window.addEventListener('resize', function updateRadius() {
+        demo4.radius(demo4.element.offsetWidth / 2);
+    });
 </script>
 
 <br>
