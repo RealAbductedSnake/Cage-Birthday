@@ -1,13 +1,8 @@
 'use strict';
 
-// If set to true, the user must press
-// UP UP DOWN ODWN LEFT RIGHT LEFT RIGHT A B
-// to trigger the confetti with a random color theme.
-// Otherwise the confetti constantly falls.
 var onlyOnKonami = false;
 
 $(function() {
-    // Globals
     var $window = $(window)
         , random = Math.random
         , cos = Math.cos
@@ -25,7 +20,6 @@ $(function() {
         isRunning = false
     }, runFor);
 
-    // Settings
     var konami = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65]
         , pointer = 0;
 
@@ -69,21 +63,16 @@ $(function() {
         return 'rgb(' + r + ',' + g + ',' + b + ')';
     }
 
-    // Cosine interpolation
     function interpolation(a, b, t) {
         return (1-cos(PI*t))/2 * (b-a) + a;
     }
 
-    // Create a 1D Maximal Poisson Disc over [0, 1]
     var radius = 1/eccentricity, radius2 = radius+radius;
     function createPoisson() {
-        // domain is the set of points which are still available to pick from
-        // D = union{ [d_i, d_i+1] | i is even }
         var domain = [radius, 1-radius], measure = 1-radius2, spline = [0, 1];
         while (measure) {
             var dart = measure * random(), i, l, interval, a, b, c, d;
 
-            // Find where dart lies
             for (i = 0, l = domain.length, measure = 0; i < l; i += 2) {
                 a = domain[i], b = domain[i+1], interval = b-a;
                 if (dart < measure+interval) {
@@ -94,23 +83,16 @@ $(function() {
             }
             c = dart-radius, d = dart+radius;
 
-            // Update the domain
             for (i = domain.length-1; i > 0; i -= 2) {
                 l = i-1, a = domain[l], b = domain[i];
-                // c---d          c---d  Do nothing
-                //   c-----d  c-----d    Move interior
-                //   c--------------d    Delete interval
-                //         c--d          Split interval
-                //       a------b
                 if (a >= c && a < d)
-                    if (b > d) domain[l] = d; // Move interior (Left case)
-                    else domain.splice(l, 2); // Delete interval
+                    if (b > d) domain[l] = d;
+                    else domain.splice(l, 2);
                 else if (a < c && b > c)
-                    if (b <= d) domain[i] = c; // Move interior (Right case)
-                    else domain.splice(i, 0, c, d); // Split interval
+                    if (b <= d) domain[i] = c;
+                    else domain.splice(i, 0, c, d);
             }
 
-            // Re-measure the domain
             for (i = 0, l = domain.length, measure = 0; i < l; i += 2)
                 measure += domain[i+1]-domain[i];
         }
@@ -118,7 +100,6 @@ $(function() {
         return spline.sort();
     }
 
-    // Create the overarching container
     var container = document.createElement('div');
     container.style.position = 'fixed';
     container.style.top      = '0';
@@ -128,7 +109,6 @@ $(function() {
     container.style.overflow = 'visible';
     container.style.zIndex   = '9999';
 
-    // Confetto constructor
     function Confetto(theme) {
         this.frame = 0;
         this.outer = document.createElement('div');
@@ -159,7 +139,6 @@ $(function() {
         outerStyle.left = this.x + 'px';
         outerStyle.top  = this.y + 'px';
 
-        // Create the periodic spline
         this.splineX = createPoisson();
         this.splineY = [];
         for (var i = 1, l = this.splineX.length-1; i < l; ++i)
@@ -172,7 +151,6 @@ $(function() {
             this.y += this.dy * delta;
             this.theta += this.dTheta * delta;
 
-            // Compute spline and convert to polar
             var phi = this.frame % 7777 / 7777, i = 0, j = 1;
             while (phi >= this.splineX[j]) i = j++;
             var rho = interpolation(
@@ -192,10 +170,7 @@ $(function() {
 
     function poof() {
         if (!frame) {
-            // Append the container
             document.body.appendChild(container);
-
-            // Add confetti
 
             var theme = colorThemes[onlyOnKonami ? colorThemes.length * random()|0 : 0]
                 , count = 0;
@@ -215,7 +190,6 @@ $(function() {
             })(0);
 
 
-            // Start the loop
             var prev = undefined;
             requestAnimationFrame(function loop(timestamp) {
                 var delta = prev ? timestamp - prev : 0;
@@ -232,7 +206,6 @@ $(function() {
                 if (timer || confetti.length)
                     return frame = requestAnimationFrame(loop);
 
-                // Cleanup
                 document.body.removeChild(container);
                 frame = undefined;
             });
